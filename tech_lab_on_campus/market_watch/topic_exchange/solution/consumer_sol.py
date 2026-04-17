@@ -25,14 +25,18 @@ class mqConsumer():
         exchange = self.channel.exchange_declare(exchange=self.exchange_name, exchange_type="topic")
 
         # Bind Binding Key to Queue on the exchange
-        self.channel.queue_bind(
-            queue = self.queue_name,
-            routing_key = self.binding_key,
-            exchange = self.exchange_name,
-        )
+        self.bindQueueToExchange(self.queue_name, None)
 
         # Set-up Callback function for receiving messages
         self.channel.basic_consume(self.queue_name, self.on_message_callback, auto_ack=False)
+
+    def bindQueueToExchange(self, queueName, topic):
+        # Bind Binding Key to Queue on the exchange
+        self.channel.queue_bind(
+            queue = queueName,
+            routing_key = self.binding_key,
+            exchange = self.exchange_name,
+        )
 
     def on_message_callback(self, channel, method_frame, header_frame, body):
         # Acknowledge message
