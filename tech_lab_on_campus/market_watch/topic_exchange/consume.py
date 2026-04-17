@@ -26,7 +26,9 @@ def main(sector: str, queueName: str) -> None:
     bindingKey = f'*.*.{sector}'
     consumer = mqConsumer(binding_key=bindingKey,exchange_name="Tech Lab Topic Exchange",queue_name=queueName)    
     consumer.startConsuming()
-    
+
+def subscribe(sector: str, ticker: str, q) -> None:
+    bindingKey = f'*.{ticker}.{sector}'
 
 
 if __name__ == "__main__":
@@ -38,3 +40,10 @@ if __name__ == "__main__":
     sector = sys.argv[1]
     queueName = sys.argv[2]
     sys.exit(main(sector,queueName))
+    ticker = "goog"
+    sector = "tech"
+    # ticker = input("Enter stock")
+    # sector = input("Enter sector")
+
+    subscribe(sector, ticker)
+    
