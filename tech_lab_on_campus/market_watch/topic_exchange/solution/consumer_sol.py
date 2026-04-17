@@ -3,8 +3,7 @@ import os
 from consumer_interface import mqConsumerInterface
 
 class mqConsumer():
-    def __init__(self, binding_key, exchange_name, queue_name):
-        self.binding_key = binding_key
+    def __init__(self, exchange_name, queue_name):
         self.exchange_name = exchange_name
         self.queue_name = queue_name
 
@@ -24,17 +23,15 @@ class mqConsumer():
         # Create the exchange if not already presen
         exchange = self.channel.exchange_declare(exchange=self.exchange_name, exchange_type="topic")
 
-        # Bind Binding Key to Queue on the exchange
-        self.bindQueueToExchange(self.queue_name, None)
-
         # Set-up Callback function for receiving messages
         self.channel.basic_consume(self.queue_name, self.on_message_callback, auto_ack=False)
 
-    def bindQueueToExchange(self, queueName, topic):
+    def bindQueueToExchange(self, queueName, binding_key, topic):
         # Bind Binding Key to Queue on the exchange
+        
         self.channel.queue_bind(
             queue = queueName,
-            routing_key = self.binding_key,
+            routing_key = binding_key,
             exchange = self.exchange_name,
         )
 
